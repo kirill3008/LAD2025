@@ -16,6 +16,67 @@ int mvwaddwstr(WINDOW *win, int y, int x, const wchar_t *wstr);
 
 #define ESC 27
 
+int load_file(const char *filename, wchar_t ***lines, int *total_lines) {
+    FILE *file;
+    int line_count = 0;
+    char c;
+    char *buffer = NULL;
+    size_t buffer_size = 0;
+    ssize_t read_size;
+    int len;
+    
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        fprintf(stderr, "Error opening file: %s\n", filename);
+        return 1;
+    }
+    
+    // Count lines in the file
+    while ((c = fgetc(file)) != EOF) {
+        if (c == '\n') {
+            line_count++;
+        }
+    }
+    if (c != '\n' && ftell(file) > 0) {
+        line_count++;
+    }
+    rewind(file);
+    
+    // Allocate memory for the lines
+    *lines = (wchar_t **)malloc((line_count + 1) * sizeof(wchar_t *));
+    if (*lines == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        fclose(file);
+        return 1;
+    }
+    
+    // Read file content
+    *total_lines = 0;
+    while (*total_lines < line_count && (read_size = getline(&buffer, &buffer_size, file)) != -1) {
+        len = (int)read_size;
+        if (len > 0 && buffer[len - 1] == '\n') {
+            buffer[len - 1] = '\0';
+            len--;
+        }
+        
+        (*lines)[*total_lines] = (wchar_t *)calloc(len + 1, sizeof(wchar_t));
+        if ((*lines)[*total_lines] == NULL) {
+            fprintf(stderr, "Memory allocation error\n");
+            break;
+        }
+        
+        mbstowcs((*lines)[*total_lines], buffer, len + 1);
+        (*total_lines)++;
+    }
+    
+    if (buffer != NULL) {
+        free(buffer);
+    }
+    
+    fclose(file);
+    return 0;
+}
+
 
 void show_status(WINDOW *win, int top_line, int total_lines, int rows, int left_col) {
     int bottom_row = rows - 1;
@@ -65,10 +126,8 @@ void update_display(WINDOW *win, wchar_t **lines, int total_lines, int top_line,
 
 int main(int argc, char ** argv) {
     setlocale(LC_ALL, "");
-    FILE *file;
     WINDOW *border_win, *content_win;
     int ch, rows, cols, content_rows, content_cols;
-    int len;
     
     wchar_t **lines;
     int total_lines = 0;
@@ -80,28 +139,7 @@ int main(int argc, char ** argv) {
         return 1;
     }
     
-    file = fopen(argv[1], "r");
-    if (file == NULL) {
-        fprintf(stderr, "Error opening file: %s\n", argv[1]);
-        return 1;
-    }
-    
-    int line_count = 0;
-    char c;
-    while ((c = fgetc(file)) != EOF) {
-        if (c == '\n') {
-            line_count++;
-        }
-    }
-    if (c != '\n' && ftell(file) > 0) {
-        line_count++;
-    }
-    rewind(file);
-    
-    lines = (wchar_t **)malloc((line_count + 1) * sizeof(wchar_t *));
-    if (lines == NULL) {
-        fprintf(stderr, "Memory allocation error\n");
-        fclose(file);
+    if (load_file(argv[1], &lines, &total_lines) != 0) {
         return 1;
     }
 
@@ -118,7 +156,7 @@ int main(int argc, char ** argv) {
     cbreak();
     noecho();
     keypad(stdscr, TRUE);
-    curs_set(0); // Hide cursor
+    curs_set(0);
     
     getmaxyx(stdscr, rows, cols);
     
@@ -136,7 +174,6 @@ int main(int argc, char ** argv) {
     if (content_win == NULL) {
         endwin();
         fprintf(stderr, "Error creating content window\n");
-        fclose(file);
         return 1;
     }
     scrollok(content_win, TRUE);
@@ -144,39 +181,16 @@ int main(int argc, char ** argv) {
      
     wclear(content_win);
     
-    char *buffer = NULL;
-    size_t buffer_size = 0;
-    ssize_t read_size;
-    
-    while (total_lines < line_count && (read_size = getline(&buffer, &buffer_size, file)) != -1) {
-        len = (int)read_size;
-        if (len > 0 && buffer[len - 1] == '\n') {
-            buffer[len - 1] = '\0';
-            len--;
-        }
-        
-        lines[total_lines] = (wchar_t *)calloc(len + 1, sizeof(wchar_t));
-        if (lines[total_lines] == NULL) {
-            fprintf(stderr, "Memory allocation error\n");
-            break;
-        }
-        
-        mbstowcs(lines[total_lines], buffer, len + 1);
-        total_lines++;
-    }
-     
-     if (buffer != NULL) {
-         free(buffer);
-     }
     
     update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
     
     while ((ch = wgetch(content_win)) != ESC && ch != 'q') {
+        int display_updated = 0;
         switch (ch) {
             case KEY_UP:
                 if (top_line > 0) {
                     top_line--;
-                    update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                    display_updated = 1;
                 }
                 break;
                 
@@ -184,7 +198,7 @@ int main(int argc, char ** argv) {
                 if (top_line != 0) {
                     top_line = 0;
                     left_col = 0;
-                    update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                    display_updated = 1;
                 }
                 break;
                 
@@ -194,7 +208,7 @@ int main(int argc, char ** argv) {
                     if (max_top < 0) max_top = 0;
                     if (top_line != max_top) {
                         top_line = max_top;
-                        update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                        display_updated = 1;
                     }
                 }
                 break;
@@ -203,7 +217,7 @@ int main(int argc, char ** argv) {
                 if (top_line > 0) {
                     int display_rows = content_rows - 1;
                     top_line = (top_line > display_rows) ? top_line - display_rows : 0;
-                    update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                    display_updated = 1;
                 }
                 break;
                 
@@ -211,7 +225,7 @@ int main(int argc, char ** argv) {
             case ' ':
                 if (top_line < total_lines - (content_rows - 1)) {
                     top_line++;
-                    update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                    display_updated = 1;
                 }
                 break;
                 
@@ -221,32 +235,34 @@ int main(int argc, char ** argv) {
                     int max_top = total_lines - display_rows;
                     if (max_top < 0) max_top = 0;
                     top_line = (top_line + display_rows < max_top) ? top_line + display_rows : max_top;
-                    update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                    display_updated = 1;
                 }
                 break;
                   
               case KEY_LEFT:
                   if (left_col > 0) {
                       left_col--;
-                      update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                      display_updated = 1;
                   }
                   break;
                   
               case KEY_RIGHT:
                   left_col++;
-                  update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                  display_updated = 1;
                   break;
                   
-              case 'h': // Reset horizontal position
+              case 'h':
                   if (left_col != 0) {
                       left_col = 0;
-                      update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+                      display_updated = 1;
                   }
                   break;
         }
+         
+         if (display_updated) {
+             update_display(content_win, lines, total_lines, top_line, content_rows, left_col);
+         }
     }
-    
-    fclose(file);
     
     for (int i = 0; i < total_lines; i++) {
         free(lines[i]);
