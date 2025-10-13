@@ -1,0 +1,31 @@
+# Compiled binary
+range
+
+# Test output files
+test*_output.txt
+
+# Reference files (optional, uncomment if you want to version control these)
+# test*_reference.txt
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Debug files
+*.dSYM/
+*.su
+
+# Editor backups
+*~
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db

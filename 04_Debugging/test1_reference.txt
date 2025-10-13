@@ -1,0 +1,8 @@
+@@@ Current value (i):$1 = 5
+@@@ Start (M):$2 = 1
+@@@ End (N):$3 = 12
+@@@ Step (S):$4 = 1
+@@@ Current value (i):$5 = 10
+@@@ Start (M):$6 = 1
+@@@ End (N):$7 = 12
+@@@ Step (S):$8 = 1

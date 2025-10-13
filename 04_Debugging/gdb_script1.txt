@@ -1,0 +1,17 @@
+set pagination off
+set confirm off
+file range
+break 25 if i % 5 == 0
+run 1 12 > /dev/null
+while $_thread
+  echo @@@ Current value (i): 
+  print i
+  echo @@@ Start (M): 
+  print M
+  echo @@@ End (N): 
+  print N
+  echo @@@ Step (S): 
+  print S
+  continue
+end
+quit

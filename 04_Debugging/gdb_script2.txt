@@ -1,0 +1,24 @@
+set pagination off
+set confirm off
+file range
+# Set a counter for the iteration
+set $count = 0
+break 25
+run -100 100 3 > /dev/null
+while $_thread
+  set $count = $count + 1
+  if $count >= 28 && $count <= 35
+    echo @@@ Iteration number: 
+    print $count
+    echo @@@ Current value (i): 
+    print i
+    echo @@@ Start (M): 
+    print M
+    echo @@@ End (N): 
+    print N
+    echo @@@ Step (S): 
+    print S
+  end
+  continue
+end
+quit
