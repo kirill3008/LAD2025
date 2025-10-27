@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
         if (bytes_written != bytes_read) {
             close(source_fd);
             close(dest_fd);
-            unlink(dest_path);  // Remove incomplete destination
+            unlink(dest_path);
             fprintf(stderr, "Error: Failed to write to destination file - %s\n", strerror(errno));
             return 5; // ERR_WRITE_DEST
         }
@@ -59,27 +59,24 @@ int main(int argc, char** argv) {
     if (bytes_read == -1) {
         close(source_fd);
         close(dest_fd);
-        unlink(dest_path);  // Remove incomplete destination
+        unlink(dest_path);
         fprintf(stderr, "Error: Failed to read source file - %s\n", strerror(errno));
         return 4; // ERR_READ_SOURCE
     }
 
-    // Close source file
     if (close(source_fd) == -1) {
         close(dest_fd);
-        unlink(dest_path);  // Remove destination on error
+        unlink(dest_path);
         fprintf(stderr, "Error: Failed to close source file - %s\n", strerror(errno));
         return 6; // ERR_CLOSE_FILES
     }
 
-    // Close destination file
     if (close(dest_fd) == -1) {
-        unlink(dest_path);  // Remove destination on error
+        unlink(dest_path);
         fprintf(stderr, "Error: Failed to close destination file - %s\n", strerror(errno));
         return 6; // ERR_CLOSE_FILES
     }
 
-    // Remove source file using unlink (more direct than remove)
     if (unlink(source_path) == -1) {
         fprintf(stderr, "Error: Failed to remove source file - %s\n", strerror(errno));
         return 7; // ERR_REMOVE_SOURCE
