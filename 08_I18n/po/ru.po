@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: guess 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-10 12:00+0300\n"
+"POT-Creation-Date: 2025-11-17 22:14+0300\n"
 "PO-Revision-Date: 2023-11-10 12:00+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -10,25 +10,38 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:19
+#, c-format
 msgid "Think of a number between 1 and 100.\n"
 msgstr "Загадайте число от 1 до 100.\n"
 
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:24
+#, c-format
 msgid "Is your number greater than %d? (y/n): "
 msgstr "Ваше число больше, чем %d? (д/н): "
 
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:28
+#, c-format
 msgid "Error: Unexpected end of input (^D).\n"
 msgstr "Ошибка: Неожиданный конец ввода (^D).\n"
 
-msgid "Error: Invalid response. Please enter 'y' or 'n'.\n"
-msgstr "Ошибка: Неверный ответ. Пожалуйста, введите 'д' или 'н'.\n"
-
-msgid "Your number is %d!\n"
-msgstr "Ваше число - %d!\n"
-
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:39
 msgid "y"
 msgstr "д"
 
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:42
 msgid "n"
 msgstr "н"
+
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:46
+#, c-format
+msgid "Error: Invalid response. Please enter 'y' or 'n'.\n"
+msgstr "Ошибка: Неверный ответ. Пожалуйста, введите 'д' или 'н'.\n"
+
+#: /home/arkhip0v0/LAD2025/08_I18n/guess.c:52
+#, c-format
+msgid "Your number is %d!\n"
+msgstr "Ваше число - %d!\n"
