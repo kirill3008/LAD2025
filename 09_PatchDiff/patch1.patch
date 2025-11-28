@@ -1,0 +1,25 @@
+--- maze.c	2025-11-28 12:00:50.012536163 +0300
++++ maze_p1.c	2025-11-28 12:18:35.488600798 +0300
+@@ -160,10 +160,19 @@
+     }
+ }
+ 
+-int main() {
+-    srand(time(NULL));
+-    
++int main(int argc, char** argv) {
+     int maze_size = 6;
++    
++    if (argc > 1) {
++        int size = atoi(argv[argc - 1]);
++        if (size > 0) {
++            maze_size = size;
++        } else {
++            printf("Invalid maze size, using default (6)\n");
++        }
++    }
++    
++    srand(time(NULL));
+     int actual_size = maze_size * 2 + 1;
+     
+     char** maze = malloc(actual_size * sizeof(char*));

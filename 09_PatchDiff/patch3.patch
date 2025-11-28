@@ -1,0 +1,24 @@
+--- maze_p2.c	2025-11-28 12:30:41.969644868 +0300
++++ maze_p3.c	2025-11-28 12:31:20.604647212 +0300
+@@ -162,6 +162,8 @@
+ }
+ 
+ int main(int argc, char** argv) {
++    unsigned int seed = time(NULL);
++    
+     char passage = '.';
+     char wall = '#';
+     
+@@ -185,7 +187,11 @@
+         }
+     }
+     
+-    srand(time(NULL));
++    if (argc > 3) {
++        seed = atoi(argv[argc - 3]);
++    }
++    
++    srand(seed);
+     int actual_size = maze_size * 2 + 1;
+     
+     char** maze = malloc(actual_size * sizeof(char*));

@@ -1,0 +1,87 @@
+--- maze_p1.c	2025-11-28 12:26:16.719628777 +0300
++++ maze_p2.c	2025-11-28 12:30:41.969644868 +0300
+@@ -1,6 +1,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <time.h>
++#include <string.h>
+ #include <stdbool.h>
+ 
+ typedef struct {
+@@ -69,18 +70,18 @@
+     }
+ }
+ 
+-void init_maze(char** maze, int maze_size) {
++void init_maze(char** maze, int maze_size, char wall, char passage) {
+     int actual_size = maze_size * 2 + 1;
+     
+     for (int i = 0; i < actual_size; i++) {
+         for (int j = 0; j < actual_size; j++) {
+-            maze[i][j] = '#';
++            maze[i][j] = wall;
+         }
+     }
+     
+     for (int i = 0; i < maze_size; i++) {
+         for (int j = 0; j < maze_size; j++) {
+-            maze[i * 2 + 1][j * 2 + 1] = '.';
++            maze[i * 2 + 1][j * 2 + 1] = passage;
+         }
+     }
+ }
+@@ -121,7 +122,7 @@
+     return walls;
+ }
+ 
+-void generate_maze(char** maze, int maze_size) {
++void generate_maze(char** maze, int maze_size, char passage) {
+     int wall_count;
+     Wall* walls = generate_walls(maze_size, &wall_count);
+     
+@@ -140,7 +141,7 @@
+         int room2_idx = room_to_index(walls[i].room2_x, walls[i].room2_y, maze_size);
+         
+         if (find_set(set, room1_idx) != find_set(set, room2_idx)) {
+-            maze[walls[i].y][walls[i].x] = '.';
++            maze[walls[i].y][walls[i].x] = passage;
+             
+             union_sets(set, room1_idx, room2_idx);
+             walls_removed++;
+@@ -161,6 +162,9 @@
+ }
+ 
+ int main(int argc, char** argv) {
++    char passage = '.';
++    char wall = '#';
++    
+     int maze_size = 6;
+     
+     if (argc > 1) {
+@@ -172,6 +176,15 @@
+         }
+     }
+     
++    if (argc > 2) {
++        if (strlen(argv[argc - 2]) == 2) {
++            passage = argv[argc - 2][0];
++            wall = argv[argc - 2][1];
++        } else {
++            printf("Invalid maze symbols format\n");
++        }
++    }
++    
+     srand(time(NULL));
+     int actual_size = maze_size * 2 + 1;
+     
+@@ -180,8 +193,8 @@
+         maze[i] = malloc(actual_size * sizeof(char));
+     }
+     
+-    init_maze(maze, maze_size);
+-    generate_maze(maze, maze_size);
++    init_maze(maze, maze_size, wall, passage);
++    generate_maze(maze, maze_size, passage);
+     print_maze(maze, actual_size);
+     
+     for (int i = 0; i < actual_size; i++) {
