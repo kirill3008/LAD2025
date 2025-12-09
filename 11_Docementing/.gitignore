@@ -1,0 +1,9 @@
+# Generated documentation (regenerate with doxygen Doxyfile)
+build/doc/
+
+# Generated translation files
+po/guess.pot
+po/*.po~
+
+# Generated locale directories
+locale/
