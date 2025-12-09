@@ -43,3 +43,39 @@ add_custom_command(
 # Make sure MO files are built
 add_custom_target(translations ALL
     DEPENDS ${MO_DIR}/ru/LC_MESSAGES/guess.mo)
+
+# Documentation generation
+# Generate README.md from the program's --help-md output
+add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/README.md
+    COMMAND ./guess --help-md > ${CMAKE_BINARY_DIR}/README.md
+    DEPENDS guess
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating README.md from --help-md output"
+)
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    # Generate Doxygen documentation after README.md is created
+    add_custom_command(
+        OUTPUT ${CMAKE_BINARY_DIR}/doc/html/index.html
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+        DEPENDS ${CMAKE_BINARY_DIR}/README.md
+        COMMENT "Generating Doxygen documentation"
+    )
+    
+    add_custom_target(docs
+        DEPENDS ${CMAKE_BINARY_DIR}/doc/html/index.html
+    )
+else()
+    message(WARNING "Doxygen not found: 'make docs' target will not be available")
+endif()
+
+# Main build target that includes documentation
+add_custom_target(all_except_docs
+    DEPENDS guess ${CMAKE_BINARY_DIR}/README.md
+)
+
+add_custom_target(all
+    DEPENDS all_except_docs
+)
