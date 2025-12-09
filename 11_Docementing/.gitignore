@@ -7,3 +7,6 @@ po/*.po~
 
 # Generated locale directories
 locale/
+
+# Generated README.md (temporary copy for Doxygen)
+README.md

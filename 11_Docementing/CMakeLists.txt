@@ -47,10 +47,10 @@ find_package(Doxygen)
 if(DOXYGEN_FOUND)
     add_custom_command(
         OUTPUT ${CMAKE_BINARY_DIR}/doc/html/index.html
-        COMMAND cd ${CMAKE_SOURCE_DIR} && ${DOXYGEN_EXECUTABLE} Doxyfile
+        COMMAND cp ${CMAKE_BINARY_DIR}/README.md ${CMAKE_SOURCE_DIR}/README.md && ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
         DEPENDS ${CMAKE_BINARY_DIR}/README.md
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Generating Doxygen documentation"
+        COMMENT "Copying README.md and generating Doxygen documentation"
     )
     
     add_custom_target(docs

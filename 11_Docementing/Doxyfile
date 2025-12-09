@@ -13,8 +13,12 @@ OPTIMIZE_OUTPUT_FOR_C  = YES
 
 # Input files
 INPUT                  = .
-FILE_PATTERNS          = build/README.md guess.c
-USE_MDFILE_AS_MAINPAGE = build/README.md
+FILE_PATTERNS          = 
+INPUT_FILE_ENCODING    = UTF-8
+USE_MDFILE_AS_MAINPAGE = README.md
+
+# Markdown support
+MARKDOWN_SUPPORT       = YES
 
 # Extraction settings
 EXTRACT_ALL            = YES
@@ -39,3 +43,6 @@ WARN_IF_UNDOCUMENTED   = YES
 # Preprocessor
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
+
+# External references
+ALLEXTERNALS           = NO
