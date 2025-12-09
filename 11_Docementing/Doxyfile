@@ -12,8 +12,8 @@ OUTPUT_LANGUAGE        = English
 OPTIMIZE_OUTPUT_FOR_C  = YES
 
 # Input files
-INPUT                  = build/README.md guess.c
-FILE_PATTERNS          = *.c
+INPUT                  = .
+FILE_PATTERNS          = build/README.md guess.c
 USE_MDFILE_AS_MAINPAGE = build/README.md
 
 # Extraction settings
