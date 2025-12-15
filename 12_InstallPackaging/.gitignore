@@ -1,0 +1,11 @@
+build/
+
+guess
+test_roman
+test_game
+
+doc/
+
+locale/
+*.mo
+*.pot

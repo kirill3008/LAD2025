@@ -1,0 +1,45 @@
+# Project information
+PROJECT_NAME           = "Number Guessing Game"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF          = "Binary search number guessing with Roman numeral support"
+
+# Output settings
+OUTPUT_DIRECTORY       = @CMAKE_BINARY_DIR@/doc/
+OUTPUT_LANGUAGE        = English
+OPTIMIZE_OUTPUT_FOR_C  = YES
+
+# Input files
+INPUT                  = @CMAKE_SOURCE_DIR@ @CMAKE_BINARY_DIR@
+FILE_PATTERNS          = 
+INPUT_FILE_ENCODING    = UTF-8
+USE_MDFILE_AS_MAINPAGE = @CMAKE_BINARY_DIR@/README.md
+
+# Markdown support
+MARKDOWN_SUPPORT       = YES
+
+# Extraction settings
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+# HTML output
+GENERATE_HTML          = YES
+HTML_TIMESTAMP         = YES
+
+# Man pages
+GENERATE_MAN           = YES
+
+# Source browsing
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+
+# Warnings
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+
+# Preprocessor
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+
+# External references
+ALLEXTERNALS           = NO

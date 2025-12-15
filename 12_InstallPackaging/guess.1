@@ -1,0 +1,63 @@
+.TH GUESS 1 "December 9, 2025" "version 1.0" "User Commands"
+.SH NAME
+guess \- number guessing game with binary search algorithm
+.SH SYNOPSIS
+.B guess
+[
+.B \-r
+] [
+.B \-h
+] [
+.B \-v
+]
+.SH DESCRIPTION
+.B guess
+is a command-line game that uses a binary search algorithm to guess a number between 1 and 100 that the user is thinking of. The program asks a series of yes/no questions to determine the number.
+.SH OPTIONS
+.TP
+.B \-r, \-\-roman
+Use Roman numerals (I, II, III, ..., C) instead of Arabic numerals (1, 2, 3, ..., 100)
+.TP
+.B \-h, \-\-help
+Display help message and exit
+.TP
+.B \-v, \-\-version
+Display version information and exit
+.SH GAMEPLAY
+When the game starts, the user is asked to think of a number between 1 and 100 (or I and C in Roman mode). The program then uses a binary search algorithm, asking questions like "Is your number greater than X?" to narrow down the possibilities until it finds the correct number.
+
+In Roman numeral mode, all numbers displayed will be in Roman numeral format.
+.SH EXAMPLES
+Play with Arabic numerals:
+.RS
+.PP
+.nf
+.fam C
+$ guess
+Think of a number between 1 and 100.
+Is your number greater than 50? (y/n): n
+Is your number greater than 25? (y/n): y
+...
+Your number is 37!
+.fam T
+.fi
+.RE
+.PP
+Play with Roman numerals:
+.RS
+.PP
+.nf
+.fam C
+$ guess -r
+Think of a number between I and C.
+Is your number greater than L? (y/n): n
+Is your number greater than XXV? (y/n): y
+...
+Your number is XXXVII!
+.fam T
+.fi
+.RE
+.SH INTERNATIONALIZATION
+The program supports internationalization and will automatically display messages in Russian if the environment is configured for Russian language (LANG=ru_RU.UTF-8).
+.SH SEE ALSO
+.BR roman (3)
