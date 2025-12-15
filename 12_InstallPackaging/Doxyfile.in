@@ -1,7 +1,7 @@
 # Project information
-PROJECT_NAME           = "Number Guessing Game"
+PROJECT_NAME           = "Number Guessing Game & Roman Numeral Library"
 PROJECT_NUMBER         = 1.0
-PROJECT_BRIEF          = "Binary search number guessing with Roman numeral support"
+PROJECT_BRIEF          = "Binary search number guessing game with standalone Roman numeral conversion library"
 
 # Output settings
 OUTPUT_DIRECTORY       = @CMAKE_BINARY_DIR@/doc/
@@ -9,13 +9,30 @@ OUTPUT_LANGUAGE        = English
 OPTIMIZE_OUTPUT_FOR_C  = YES
 
 # Input files
-INPUT                  = @CMAKE_SOURCE_DIR@ @CMAKE_BINARY_DIR@
-FILE_PATTERNS          = 
+INPUT                  = @CMAKE_SOURCE_DIR@/guess.c \
+                         @CMAKE_SOURCE_DIR@/lib/roman.h \
+                         @CMAKE_SOURCE_DIR@/lib/roman.c \
+                         @CMAKE_SOURCE_DIR@/tests/test_roman.c \
+                         @CMAKE_SOURCE_DIR@/tests/test_game.c \
+                         @CMAKE_BINARY_DIR@/README.md
+FILE_PATTERNS          = *.h *.c
 INPUT_FILE_ENCODING    = UTF-8
 USE_MDFILE_AS_MAINPAGE = @CMAKE_BINARY_DIR@/README.md
 
-# Markdown support
+EXCLUDE                = @CMAKE_BINARY_DIR@/
+EXCLUDE_PATTERNS       = */CMakeFiles/* */cmake_install.cmake */CMakeCache.txt *.log
+EXCLUDE_SYMLINKS       = YES
+
+SHOW_GROUPED_MEMB_INC  = YES
+SHOW_FILES            = YES
+SHOW_NAMESPACES       = YES
+
 MARKDOWN_SUPPORT       = YES
+TOC_INCLUDE_HEADINGS   = 2
+SUBGROUPING            = YES
+
+ALIASES                += "roman_lib{1}=\xrefitem roman_lib \"Roman Library\" \"Roman Numeral Library\" \1"
+ALIASES                += "game{1}=\xrefitem game \"Game Application\" \"Guess Number Game\" \1"
 
 # Extraction settings
 EXTRACT_ALL            = YES
@@ -43,3 +60,4 @@ MACRO_EXPANSION        = YES
 
 # External references
 ALLEXTERNALS           = NO
+
